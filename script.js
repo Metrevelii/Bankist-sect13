@@ -182,6 +182,31 @@ const headerObserver = new IntersectionObserver(stickyNav, {
 headerObserver.observe(header);
 
 
+// 198. Revealing Elements on Scroll
+// removing section--hidden class when we approach current section
+const allSections = document.querySelectorAll('.section');
+
+const revealSection = function(entries, observer) {
+  const [entry] = entries;
+  console.log(entry);
+
+  if (!entry.isIntersecting) return;
+
+  entry.target.classList.remove('section--hidden');
+  // stop observing after revealing all the sections. (no more console events on scroll)
+  observer.unobserve(entry.target);
+}
+
+const sectionObserver = new IntersectionObserver(revealSection, {
+  root: null,
+  threshold: 0.15,
+});
+
+allSections.forEach(function(section) {
+  sectionObserver.observe(section);
+  section.classList.add('section--hidden');
+})
+
 
 // 196. implementing a sticky navigation: The Scroll Event
 // Sticky navigation
