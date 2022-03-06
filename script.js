@@ -327,6 +327,65 @@ dotContainer.addEventListener('click', function (e) {
 slider();
 
 
+
+
+
+// 203 Efficient Script Loading: defer and async
+
+// Regular: <script src="script.js">
+// HEAD: shouldn't do it!
+// If we use script.js file in the head of HTML, HTML content will start loading, then stops to 
+// fetch script and then execute it, and only after that it will finish parsing HTML content, which is not ideal.
+// *** Scripts are fetched and executed after the HTML is completely parsed.
+// *** Use if you need to support old browsers
+// BODY END:
+// HTML is parsed, then script is fetched and executed.
+
+// Async: <script async src="script.js">
+// HEAD:
+// script is loaded at the same tim as HTML is parsed, but HTML parsing still stops for execution.
+// *** Scripts are fetched asynchronously and executed immediately
+// *** Usually the DOMContentLoaded events waits for all scripts to execute, except for async scripts
+// So DOMContentLoaded does not wait for an async script.
+// *** Scripts not guaranteed to execute in order.
+// *** Use for 3rd-party scripts where order doesnt matter. (e.g Google Analytics)
+// BODY END:: doesnt make sense
+
+// Defer: <script defer src="script.js">
+// HEAD:
+// script is loaded asyncronously, same as async but script is only executed at the end of HTML parsing,
+// which is mostly what we want.
+// *** Scripts are fetched asynchronously and executed after the HTML is completely parsed
+// *** DOMContentLoaded events fires after defer script is executed
+// *** Scripts are executed in order
+// *** Overall the best solution !
+// BODY END: doesnt make sense.
+
+// 202 Lifecycle DOM Events
+
+// Lifecycle: when user enters the website, till user leaves
+document.addEventListener('DOMContentLoaded', function(e) {
+  console.log('HTML parsed and DOM tree built!', e);
+});
+
+// Load event is fired by the window ASAP not only the HTML is parsed, but also
+// all the images and resources (css files.. etc)
+
+window.addEventListener('load', function(e) {
+  console.log('Page fully loaded', e);
+})
+
+
+// didnt work for me: popup if user really wants to close tab
+// window.addEventListener('beforeunload', function (e) {
+//   //Before user leaves.
+//   e.preventDefault();
+//   console.log(e);
+//   e.returnValue = 'message';
+// });
+
+
+
 // 196. implementing a sticky navigation: The Scroll Event
 // Sticky navigation
 // scroll event is not adviced to be used. it makes bad performance
