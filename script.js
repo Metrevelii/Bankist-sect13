@@ -237,6 +237,48 @@ const imgObserver = new IntersectionObserver(loadImg, {
 imgTargets.forEach(img => imgObserver.observe(img));
 
 
+// 200 Building Slider Component
+
+const slides = document.querySelectorAll('.slide');
+const btnLeft = document.querySelector('.slider__btn--left');
+const btnRight = document.querySelector('.slider__btn--right');
+
+let curSlide = 0;
+const maxSlide = slides.length;
+
+// 1st - 0% , 2nd - 100%, 3rd - 200%, 4th - 300%
+
+const goToSlide = function(slide) {
+  slides.forEach((s, i) => s.style.transform = `translateX(${100 * (i - slide)}%)`);
+}
+goToSlide(0);
+
+// curSlide = 1: 1st - -100% , 2nd - 0%, 3rd - 100%, 4th - 200%
+
+const nextSlide = function () {
+  if (curSlide == maxSlide - 1) {
+    curSlide = 0;
+  } else {
+    curSlide ++;
+  }
+
+  goToSlide(curSlide);
+}
+
+const prevSlide = function () {
+  if (curSlide === 0) {
+    curSlide = maxSlide - 1;
+  } else {
+    curSlide--;
+  }
+  goToSlide(curSlide);
+}
+
+// Next slide
+btnRight.addEventListener('click', nextSlide);
+btnLeft.addEventListener('click', prevSlide);
+
+
 
 
 
