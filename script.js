@@ -239,19 +239,39 @@ imgTargets.forEach(img => imgObserver.observe(img));
 
 // 200 Building Slider Component
 
+const slider = function() {
+
 const slides = document.querySelectorAll('.slide');
 const btnLeft = document.querySelector('.slider__btn--left');
 const btnRight = document.querySelector('.slider__btn--right');
+const dotContainer = document.querySelector('.dots');
 
 let curSlide = 0;
 const maxSlide = slides.length;
 
-// 1st - 0% , 2nd - 100%, 3rd - 200%, 4th - 300%
+// Functions
 
+// Creating Dots for slider
+const createDots = function () {
+  slides.forEach(function (_, i) {
+    dotContainer.insertAdjacentHTML('beforeend', `<button class="dots__dot" data-slide="${i}"></button>`)
+
+  })
+};
+// createDots();
+
+const activateDot = function(slide) {
+  document.querySelectorAll('.dots__dot').forEach(dot => dot.classList.remove('dots__dot--active'));
+  document.querySelector(`.dots__dot[data-slide="${slide}"]`).classList.add('dots__dot--active');
+
+}
+// activateDot(0);
+
+// 1st - 0% , 2nd - 100%, 3rd - 200%, 4th - 300%
 const goToSlide = function(slide) {
   slides.forEach((s, i) => s.style.transform = `translateX(${100 * (i - slide)}%)`);
 }
-goToSlide(0);
+// goToSlide(0);
 
 // curSlide = 1: 1st - -100% , 2nd - 0%, 3rd - 100%, 4th - 200%
 
@@ -263,6 +283,7 @@ const nextSlide = function () {
   }
 
   goToSlide(curSlide);
+  activateDot(curSlide);
 }
 
 const prevSlide = function () {
@@ -272,14 +293,38 @@ const prevSlide = function () {
     curSlide--;
   }
   goToSlide(curSlide);
+  activateDot(curSlide);
 }
+//functions
+const init = function() {
+  goToSlide(0);
+  createDots();
+  activateDot(0);
+}
+init();
 
-// Next slide
+// Next slide: Event handlers
 btnRight.addEventListener('click', nextSlide);
 btnLeft.addEventListener('click', prevSlide);
 
+// Moving slider using right and left keys
+document.addEventListener('keydown', function (e) {
+  if (e.key === 'ArrowLeft') prevSlide();
+  e.key === 'ArrowRight' && nextSlide();
+});
 
-
+// Creating dot Events
+dotContainer.addEventListener('click', function (e) {
+  if(e.target.classList.contains('dots__dot')) {
+    // const slide = e.target.dataset.slide;
+    // const slide destructured:
+    const {slide} = e.target.dataset;
+    goToSlide(slide);
+    activateDot(slide);
+  }
+})
+};
+slider();
 
 
 // 196. implementing a sticky navigation: The Scroll Event
