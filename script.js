@@ -188,7 +188,7 @@ const allSections = document.querySelectorAll('.section');
 
 const revealSection = function(entries, observer) {
   const [entry] = entries;
-  console.log(entry);
+  // console.log(entry);
 
   if (!entry.isIntersecting) return;
 
@@ -206,6 +206,38 @@ allSections.forEach(function(section) {
   sectionObserver.observe(section);
   section.classList.add('section--hidden');
 })
+
+// 199 Lazy Loading Images
+
+// selecting only imgs that have data-src attribute
+const imgTargets = document.querySelectorAll('img[data-src]');
+
+const loadImg = function(entries, observer) {
+  const [entry] = entries;
+  // console.log(entry);
+
+  if(!entry.isIntersecting) return;
+
+  // Replace src attribute with data-src
+  entry.target.src = entry.target.dataset.src;
+
+  entry.target.addEventListener('load', function() {
+    entry.target.classList.remove('lazy-img');
+  });
+
+  observer.unobserve(entry.target);
+};
+
+const imgObserver = new IntersectionObserver(loadImg, {
+  root: null,
+  threshold: 0,
+  rootMargin: '200px', //root margin loads observed target before '200px'
+});
+
+imgTargets.forEach(img => imgObserver.observe(img));
+
+
+
 
 
 // 196. implementing a sticky navigation: The Scroll Event
